@@ -1,7 +1,4 @@
 <?php
-    // use PDO;
-    // use PDOException;
-
     class AccesoPDO{
         private static AccesoPDO $objetoAccesoDatos;
         private PDO $objetoPDO;
@@ -38,9 +35,5 @@
         }
 
     }  
-
-
-
-
 
 ?>

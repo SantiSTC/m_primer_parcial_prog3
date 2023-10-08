@@ -1,6 +1,7 @@
 <?php
+require_once 'IBM.php';
 
-class Usuario {
+class Usuario implements IBM {
     public int $id;
     public string $nombre;
     public string $correo;
@@ -9,15 +10,6 @@ class Usuario {
     public string $perfil;
 
     private $pathUsuarios = "./archivos/usuarios.json";
-
-    // public function __construct($id, $nombre, $correo, $clave, $id_perfil, $perfil){
-    //     $this->id = $id;
-    //     $this->nombre = $nombre;
-    //     $this->correo = $correo;
-    //     $this->clave = $clave;
-    //     $this->id_perfil = $id_perfil;
-    //     $this->perfil = $perfil;
-    // }
 
     public function ToJSON(){
         $obj = new stdClass();
@@ -78,8 +70,7 @@ class Usuario {
         try{
             $conexion = AccesoPDO::retornarUnObjetoAcceso();
 
-            $sql = $conexion->retornarConsulta("INSERT INTO `usuarios`(`id`, `correo`, `clave`, `nombre`, `id_perfil`) VALUES (:id,:correo,:clave,:nombre,:id_perfil)");
-            $sql->bindParam(':id', $this->id, PDO::PARAM_INT);
+            $sql = $conexion->retornarConsulta("INSERT INTO `usuarios`(`correo`, `clave`, `nombre`, `id_perfil`) VALUES (:correo,:clave,:nombre,:id_perfil)");
             $sql->bindParam(':correo', $this->correo, PDO::PARAM_STR);
             $sql->bindParam(':clave', $this->clave, PDO::PARAM_STR);
             $sql->bindParam(':nombre', $this->nombre, PDO::PARAM_STR);
@@ -136,6 +127,41 @@ class Usuario {
         }
 
         return $usuarioEncontrado;
+    }
+
+    public function Modificar(){
+        try{
+            $conexion = AccesoPDO::retornarUnObjetoAcceso();
+
+            $sql = $conexion->retornarConsulta("UPDATE `usuarios` SET `id`=:id,`correo`=:correo,`clave`=:clave,`nombre`=:nombre,`id_perfil`=:id_perfil WHERE `id` = :id");
+            $sql->bindParam(':id', $this->id, PDO::PARAM_INT);
+            $sql->bindParam(':correo', $this->correo, PDO::PARAM_STR);
+            $sql->bindParam(':clave', $this->clave, PDO::PARAM_STR);
+            $sql->bindParam(':nombre', $this->nombre, PDO::PARAM_STR);
+            $sql->bindParam(':id_perfil', $this->id_perfil, PDO::PARAM_INT);
+
+            $resultado = $sql->execute();
+        } catch(PDOException $e){
+            echo "Error al modificar: " . $e->getMessage();
+            $resultado = false;
+        }
+
+        return $resultado;
+    }
+
+    public static function Eliminar(int $id){
+        try{
+            $conexion = AccesoPDO::retornarUnObjetoAcceso();
+
+            $sql = $conexion->retornarConsulta("DELETE FROM `usuarios` WHERE `id` = :id");
+            $sql->bindParam(':id', $id, PDO::PARAM_INT);
+
+            $resultado = $sql->execute();
+        } catch(PDOException $e){
+            $resultado = false;
+        }
+
+        return $resultado;
     }
 }
 

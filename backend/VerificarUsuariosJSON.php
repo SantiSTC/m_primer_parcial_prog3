@@ -23,4 +23,4 @@ if($resultado != null){
 echo json_encode($obj);
 }
 
-?>
+?> 
