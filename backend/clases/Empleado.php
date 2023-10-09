@@ -70,7 +70,8 @@ class Empleado extends Usuario implements ICRUD {
     public function Modificar(){
         try{
             if($this->foto !== null){
-                $pathFoto = "./backend/empleados/fotos/" . basename($this->foto);
+                $nombreFoto = basename($this->foto);
+                $pathFoto = "./backend/empleados/fotos/" . $nombreFoto;
                 move_uploaded_file($this->foto, $pathFoto);
             }
 
@@ -82,7 +83,7 @@ class Empleado extends Usuario implements ICRUD {
             $sql->bindParam(':clave', $this->clave, PDO::PARAM_STR);
             $sql->bindParam(':nombre', $this->nombre, PDO::PARAM_STR);
             $sql->bindParam(':id_perfil', $this->id_perfil, PDO::PARAM_INT);
-            $sql->bindParam(':foto', basename($this->foto), PDO::PARAM_STR);
+            $sql->bindParam(':foto', $nombreFoto, PDO::PARAM_STR);
             $sql->bindParam(':sueldo', $this->sueldo, PDO::PARAM_INT);
 
             $resultado = $sql->execute();
