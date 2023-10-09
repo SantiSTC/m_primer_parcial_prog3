@@ -25,15 +25,22 @@ class Usuario implements IBM {
         $obj = new stdClass();
         $obj->exito = false;
         $obj->mensaje = "Error al guardar.";
-
+    
         $archivo = fopen($this->pathUsuarios, "a");
-        $retorno = fwrite($archivo, $this->ToJSON() . "\n\r");
+    
+        $contenidoActual = file_get_contents($this->pathUsuarios);
 
-        if($retorno > 0){
+        $objetosExistente = json_decode($contenidoActual);
+    
+        $objetosExistente[] = json_decode($this->ToJSON());
+
+        $retorno = file_put_contents($this->pathUsuarios, json_encode($objetosExistente));
+    
+        if($retorno !== false){
             $obj->exito = true;
-            $obj->mensaje = "Guardado con exito.";
+            $obj->mensaje = "Guardado con éxito.";
         }
-
+    
         fclose($archivo);
         return json_encode($obj);
     }
