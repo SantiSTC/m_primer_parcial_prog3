@@ -30,11 +30,11 @@ class Usuario implements IBM {
     
         $contenidoActual = file_get_contents($this->pathUsuarios);
 
-        $objetosExistente = json_decode($contenidoActual);
+        $objetosExistentes = json_decode($contenidoActual);
     
-        $objetosExistente[] = json_decode($this->ToJSON());
+        $objetosExistentes[] = json_decode($this->ToJSON());
 
-        $retorno = file_put_contents($this->pathUsuarios, json_encode($objetosExistente));
+        $retorno = file_put_contents($this->pathUsuarios, json_encode($objetosExistentes));
     
         if($retorno !== false){
             $obj->exito = true;
